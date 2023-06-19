@@ -5,6 +5,15 @@ from comment.serializers import CommentSerializer
 from .models import Post, PostImage
 
 
+class PostListLikeSerializer(serializers.ModelSerializer):
+    owner_username = serializers.ReadOnlyField(source='owner.username')
+    category_name = serializers.ReadOnlyField(source='category.name')
+
+    class Meta:
+        model = Post
+        fields = ('id', 'title', 'owner', 'owner_username', 'category', 'category_name', 'preview')
+
+
 class PostListSerializer(serializers.ModelSerializer):
     owner_username = serializers.ReadOnlyField(source='owner.username')
     category_name = serializers.ReadOnlyField(source='category.name')
@@ -72,5 +81,3 @@ class PostDetailSerializer(serializers.ModelSerializer):
             repr['is_liked'] = user.likes.filter(post=instance).exists()
             repr['is_favorite'] = user.favorites.filter(post=instance).exists()
         return repr
-
-
